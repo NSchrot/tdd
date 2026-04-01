@@ -1,37 +1,32 @@
-let livros = [];
-let proximoId = 1;
+const { Livro } = require('../models');
 
-const criarLivro = (titulo, autor) => {
-    const livro = { id: proximoId++, titulo, autor, disponivel: true };
-    livros.push(livro);
-    return livro;
+const criarLivro = async (titulo, autor) => {
+    return await Livro.create({ titulo, autor });
 };
 
-const buscarLivroPorId = (id) => {
-    return livros.find(l => l.id === id);
+const buscarLivroPorId = async (id) => {
+    return await Livro.findByPk(id);
 };
 
-const atualizarLivro = (id, dados) => {
-    const index = livros.findIndex(l => l.id === id);
-    if (index === -1) return null;
-    livros[index] = { ...livros[index], ...dados };
-    return livros[index];
+const atualizarLivro = async (id, dados) => {
+    const livro = await Livro.findByPk(id);
+    if (!livro) return null;
+    return await livro.update(dados);
 };
 
-const deletarLivro = (id) => {
-    const index = livros.findIndex(l => l.id === id);
-    if (index === -1) return false;
-    livros.splice(index, 1);
+const deletarLivro = async (id) => {
+    const livro = await Livro.findByPk(id);
+    if (!livro) return false;
+    await livro.destroy();
     return true;
 };
 
-const listarDisponiveis = () => {
-    return livros.filter(l => l.disponivel === true);
+const listarDisponiveis = async () => {
+    return await Livro.findAll({ where: { disponivel: true } });
 };
 
-const resetarLivros = () => {
-    livros = [];
-    proximoId = 1;
+const resetarLivros = async () => {
+    await Livro.destroy({ truncate: true, cascade: true });
 };
 
 module.exports = { criarLivro, buscarLivroPorId, atualizarLivro, deletarLivro, listarDisponiveis, resetarLivros };

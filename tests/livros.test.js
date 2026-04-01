@@ -1,9 +1,14 @@
 const request = require('supertest');
 const app = require('../src/app');
 const { resetarLivros } = require('../src/services/livroService');
+const sequelize = require('../src/database/sequelize');
 
 beforeEach(() => {
     resetarLivros();
+});
+
+afterAll(async () => {
+    await sequelize.close();
 });
 
 describe('POST /livros', () => {
