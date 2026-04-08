@@ -4,6 +4,10 @@ const criarLivro = async (titulo, autor) => {
     return await Livro.create({ titulo, autor });
 };
 
+const listarLivros = async () => {
+    return await Livro.findAll();
+};
+
 const buscarLivroPorId = async (id) => {
     return await Livro.findByPk(id);
 };
@@ -29,4 +33,4 @@ const resetarLivros = async () => {
     await Livro.destroy({ truncate: true, cascade: true });
 };
 
-module.exports = { criarLivro, buscarLivroPorId, atualizarLivro, deletarLivro, listarDisponiveis, resetarLivros };
+module.exports = { criarLivro, listarLivros, buscarLivroPorId, atualizarLivro, deletarLivro, listarDisponiveis, resetarLivros };

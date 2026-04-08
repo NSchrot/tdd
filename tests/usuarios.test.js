@@ -1,6 +1,12 @@
 const axios = require('axios');
 require('dotenv').config();
+require('./helpers/testServer');
+const { resetDatabase } = require('./helpers/resetDatabase');
 const api = `http://localhost:${process.env.PORT || 3000}`;
+
+beforeAll(async () => {
+  await resetDatabase();
+});
 
 describe("Usuários", () => {
   test("deve retornar uma lista de usuários", async () => {
@@ -10,7 +16,14 @@ describe("Usuários", () => {
   });
 
   test("deve retornar um usuário pelo id", async () => {
-    const res = await axios.get(`${api}/usuarios/1`);
+    const criado = await axios.post(`${api}/usuarios`, {
+      nome: "Usuário Base",
+      email: `base_${Date.now()}@email.com`,
+      senha: "123456",
+      tipo: "aluno",
+    });
+
+    const res = await axios.get(`${api}/usuarios/${criado.data.id}`);
     expect(res.status).toBe(200);
     expect(res.data).toHaveProperty("id");
     expect(res.data).toHaveProperty("nome");

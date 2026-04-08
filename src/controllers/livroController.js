@@ -1,4 +1,13 @@
-const { criarLivro, buscarLivroPorId, atualizarLivro, deletarLivro, listarDisponiveis } = require("../services/livroService");
+const { criarLivro, listarLivros, buscarLivroPorId, atualizarLivro, deletarLivro, listarDisponiveis } = require("../services/livroService");
+
+const listar = async (req, res) => {
+    try {
+        const livros = await listarLivros();
+        res.status(200).json(livros);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
 
 const criar = async (req, res) => {
     try {
@@ -52,4 +61,4 @@ const disponiveis = async (req, res) => {
     }
 };
 
-module.exports = { criar, buscarPorId, atualizar, deletar, disponiveis };
+module.exports = { listar, criar, buscarPorId, atualizar, deletar, disponiveis };
